@@ -10,6 +10,9 @@ var peixoto
 var peixote
 var px1, px2,  px3, px4, px5, px6;
 var pl1, pl2, pl3;
+var galgas
+var gpredadores
+var gplanctons
 
 function preload(){ // função que carregar todas as imagens e animações
   al1=loadImage("assets/alg1.png")
@@ -48,7 +51,13 @@ function setup(){ // todas as configuraçoes dos objetos
   areia.shapeColor="#FFFACD"
   peixoto=createSprite(50,250,10,10)
   peixoto.addImage(peixote);
-  peixoto.scale=0.3
+  peixoto.scale=0.15
+galgas=new Group()
+gplanctons=new Group()
+gpredadores=new Group()
+
+
+
 }
 
 
@@ -58,12 +67,18 @@ function draw(){
   algas();
   prezas();
   plactons();
+  Controle();
+  peixoto.overlap(gplanctons,function(coletor,coletado){
+    coletado.remove
+  })
 
 }
 function algas (){
   if(frameCount%40===0){
   var algazarra=createSprite(710,470,20,20)
   algazarra.velocityX=-2
+  galgas.add(algazarra)
+  algazarra.lifetime=400
   var zarra= Math.round(random(1,5))
   switch (zarra) {
     case 1:algazarra.addImage(al1)
@@ -90,6 +105,8 @@ function algas (){
     if(frameCount%40===0){
       var predadores=createSprite(710,random(0,460),20,20)
       predadores.velocityX=-2
+      gpredadores.add(predadores)
+      predadores.lifetime=400
       var zarra= Math.round(random(1,6))
       switch (zarra) {
         case 1:predadores.addImage(px1)
@@ -119,6 +136,8 @@ function algas (){
       var plac=createSprite(710,random(0,460),20,20)
       plac.velocityX=-2
       plac.scale=0.08
+      gplanctons.add(plac)
+      plac.lifetime=400
       var zarra= Math.round(random(1,3))
       switch (zarra) {
         case 1:plac.addImage(pl1)
@@ -134,4 +153,20 @@ function algas (){
       }
     }
   }
+  function Controle(){
+if (keyDown("up")){
+  peixoto.y-=1
+}
+if (keyDown("down")){
+  peixoto.y+=1
+}
+if (keyDown("right")){
+  peixoto.x+=1
+}
+if (keyDown("left")){
+  peixoto.x-=1
+}
+  }
+
+
 
