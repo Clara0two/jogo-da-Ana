@@ -13,6 +13,12 @@ var pl1, pl2, pl3;
 var galgas
 var gpredadores
 var gplanctons
+var comer
+var gamerover
+var pnt=0
+var life=5
+var go
+var estado="jogar"
 
 function preload(){ // função que carregar todas as imagens e animações
   al1=loadImage("assets/alg1.png")
@@ -33,7 +39,8 @@ function preload(){ // função que carregar todas as imagens e animações
   pl1=loadImage("assets/pl1.png")
   pl2=loadImage("assets/pl2.png")
   pl3=loadImage("assets/pl3.png")
-
+  comer= loadSound("assets/jump.mp3")
+go=loadImage("assets/gameover.png")
 
 
 
@@ -50,11 +57,12 @@ function setup(){ // todas as configuraçoes dos objetos
   areia=createSprite(350,480,700,100)
   areia.shapeColor="#FFFACD"
   peixoto=createSprite(50,250,10,10)
-  peixoto.addImage(peixote);
+  peixoto.addImage("peixe",peixote);
   peixoto.scale=0.15
 galgas=new Group()
 gplanctons=new Group()
 gpredadores=new Group()
+peixoto.addImage("go",go);
 
 
 
@@ -64,13 +72,37 @@ gpredadores=new Group()
 function draw(){
   background("	#87CEEB");
   drawSprites(); 
+
+  peixoto.overlap(gplanctons,function(coletor,coletado){
+    coletado.remove()
+    comer.play()
+    coletor.scale+= 0.01
+    pnt+=1
+  })
+text("pontuação:"+pnt,20,20)
+text("life:"+life,100,20)
+if (peixoto.isTouching(gpredadores)){
+  life-=1
+  peixoto.x=20
+  peixoto.y=250
+}
+if (life===0){
+peixoto.changeImage("go")
+estado="fim"
+}
+if (estado==="jogar"){
   algas();
   prezas();
   plactons();
   Controle();
-  peixoto.overlap(gplanctons,function(coletor,coletado){
-    coletado.remove
-  })
+}
+if (estado==="fim"){
+  gpredadores.destroyEach()
+ gplanctons.destroyEach()
+peixoto.x=350
+peixote.y=250
+peixoto.scale=1
+}
 
 }
 function algas (){
@@ -102,15 +134,18 @@ function algas (){
 }
 }
     function prezas() {
-    if(frameCount%40===0){
+    if(frameCount%80===0){
       var predadores=createSprite(710,random(0,460),20,20)
-      predadores.velocityX=-2
+      predadores.velocityX=-3
       gpredadores.add(predadores)
       predadores.lifetime=400
+      predadores.debug=true
+      predadores.setCollider("circle",0,0,40)
       var zarra= Math.round(random(1,6))
       switch (zarra) {
         case 1:predadores.addImage(px1)
        // predadores.scale=1.5
+      
         //algazarra.y+=10
           break;
           case 2:predadores.addImage(px4)
@@ -155,16 +190,16 @@ function algas (){
   }
   function Controle(){
 if (keyDown("up")){
-  peixoto.y-=1
+  peixoto.y-=2
 }
 if (keyDown("down")){
-  peixoto.y+=1
+  peixoto.y+=2
 }
 if (keyDown("right")){
-  peixoto.x+=1
+  peixoto.x+=2
 }
 if (keyDown("left")){
-  peixoto.x-=1
+  peixoto.x-=2
 }
   }
 
