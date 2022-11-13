@@ -40,7 +40,7 @@ function preload(){ // função que carregar todas as imagens e animações
   pl2=loadImage("assets/pl2.png")
   pl3=loadImage("assets/pl3.png")
   comer= loadSound("assets/jump.mp3")
-go=loadImage("assets/gameover.png")
+go=loadImage("assets/gameOver.png")
 
 
 
